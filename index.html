@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>go.travel - Your AI-Powered Travel Companion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            --secondary-gradient: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+            --accent-blue: #1e40af;
+            --accent-green: #059669;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        .brand-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--accent-blue);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Itinerary Generator */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .generate-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Itinerary Display */
+        .itinerary-container {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        .activity {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-time {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .safety-alert {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .safety-alert h4 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Safety Features */
+        .safety-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .safety-card {
+            background: linear-gradient(135deg, #fef7ff 0%, #f0f9ff 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .safety-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .safety-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .emergency-button {
+            background: #ef4444;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .emergency-button:hover {
+            background: #dc2626;
+        }
+
+        /* Map Container */
+        .map-container {
+            height: 400px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .safety-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid var(--accent-blue);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo brand-font">go.travel</a>
+            <ul class="nav-links">
+                <li><a href="#itinerary">Plan Trip</a></li>
+                <li><a href="#safety">Safety</a></li>
+                <li><a href="#map">Map</a></li>
+                <li><a href="#emergency">Emergency</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1 class="brand-font">Your AI-Powered Travel Companion</h1>
+            <p>Revolutionizing travel safety and ease for adventurers worldwide</p>
+            <button class="cta-button" onclick="scrollToSection('itinerary')">Start Planning Your Journey</button>
+        </div>
+    </section>
+
+    <main class="main-content container">
+        <!-- AI-Powered Itinerary Generator -->
+        <section id="itinerary" class="section">
+            <h2 class="section-title brand-font">AI-Powered Itinerary Generator</h2>
+            <p>Tell us about your dream trip and let our AI create the perfect personalized itinerary for you.</p>
+            
+            <form id="itinerary-form" class="form-grid">
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <input type="text" id="destination" name="destination" placeholder="Where are you going?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" name="start-date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" name="end-date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget">Budget Range</label>
+                    <select id="budget" name="budget" required>
+                        <option value="">Select budget range</option>
+                        <option value="budget">Budget ($0-$50/day)</option>
+                        <option value="mid-range">Mid-range ($50-$150/day)</option>
+                        <option value="luxury">Luxury ($150+/day)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accommodation">Accommodation Preference</label>
+                    <select id="accommodation" name="accommodation" required>
+                        <option value="">Select accommodation type</option>
+                        <option value="hostel">Hostel</option>
+                        <option value="hotel">Hotel</option>
+                        <option value="resort">Resort</option>
+                        <option value="airbnb">Airbnb/Vacation Rental</option>
+                        <option value="camping">Camping</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="transportation">Transportation Preference</label>
+                    <select id="transportation" name="transportation" required>
+                        <option value="">Select transportation</option>
+                        <option value="walking">Walking/Public Transit</option>
+                        <option value="rental-car">Rental Car</option>
+                        <option value="rideshare">Rideshare/Taxi</option>
+                        <option value="bicycle">Bicycle</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dietary">Dietary Restrictions</label>
+                    <input type="text" id="dietary" name="dietary" placeholder="e.g., vegetarian, gluten-free, halal">
+                </div>
+                
+                <div class="form-group">
+                    <label for="group-size">Group Size</label>
+                    <select id="group-size" name="group-size" required>
+                        <option value="1">Solo traveler</option>
+                        <option value="2">Couple</option>
+                        <option value="3-4">Small group (3-4)</option>
+                        <option value="5+">Large group (5+)</option>
+                    </select>
+                </div>
+            </form>
+            
+            <div class="form-group">
+                <label>Interests (Select all that apply)</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="history" name="interests" value="history">
+                        <label for="history">History & Culture</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="nightlife" name="interests" value="nightlife">
+                        <label for="nightlife">Nightlife</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="nature" name="interests" value="nature">
+                        <label for="nature">Nature & Outdoors</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="art" name="interests" value="art">
+                        <label for="art">Art & Museums</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="food" name="interests" value="food">
+                        <label for="food">Food & Dining</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="shopping" name="interests" value="shopping">
+                        <label for="shopping">Shopping</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="adventure" name="interests" value="adventure">
+                        <label for="adventure">Adventure Sports</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="relaxation" name="interests" value="relaxation">
+                        <label for="relaxation">Relaxation & Wellness</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" class="generate-btn" onclick="generateItinerary()">Generate My Perfect Itinerary</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Creating your personalized itinerary...</p>
+            </div>
+            
+            <div class="itinerary-container" id="itinerary-results">
+                <!-- Generated itinerary will appear here -->
+            </div>
+        </section>
+
+        <!-- Safety Features -->
+        <section id="safety" class="section">
+            <h2 class="section-title brand-font">Traveler Safety Features</h2>
+            <p>Your safety is our priority. Access essential safety tools and information for your destination.</p>
+            
+            <div class="safety-grid">
+                <div class="safety-card">
+                    <div class="safety-icon">🚨</div>
+                    <h3>Emergency Contacts</h3>
+                    <p>Quick access to local emergency numbers and services</p>
+                    <button class="emergency-button" onclick="showEmergencyContacts()">View Emergency Numbers</button>
+                </div>
+                
+                <div class="safety-card">
+                    <div class="safety-icon">📍</div>
+                    <h3>Live Location Sharing</h3>
+                    <p>Share your location with trusted contacts for added security</p>
+                    <button class="cta-button" onclick="shareLocation()">Share Location</button>
+                </div>
+                
+                <div class="safety-card">
+                    <div class="safety-icon">⚠️</div>
+                    <h3>Safety Alerts</h3>
+                    <p>Real-time safety information and area-specific warnings</p>
+                    <button class="cta-button" onclick="checkSafetyAlerts()">Check Current Alerts</button>
+                </div>
+                
+                <div class="safety-card">
+                    <div class="safety-icon">🛡️</div>
+                    <h3>Safety Tips</h3>
+                    <p>Personalized safety recommendations for your destination</p>
+                    <button class="cta-button" onclick="showSafetyTips()">Get Safety Tips</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Map -->
+        <section id="map" class="section">
+            <h2 class="section-title brand-font">Interactive Navigation Map</h2>
+            <p>Navigate your destination with our integrated map featuring real-time location tracking.</p>
+            <div class="map-container" id="map-container">
+                📍 Interactive map will load here (Google Maps integration)
+            </div>
+        </section>
+
+        <!-- Emergency Section -->
+        <section id="emergency" class="section">
+            <h2 class="section-title brand-font">Emergency Support</h2>
+            <p>24/7 emergency assistance and support for travelers worldwide.</p>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="emergency-button" onclick="triggerEmergency()" style="font-size: 1.2rem; padding: 1.5rem 3rem;">
+                    🚨 EMERGENCY ASSISTANCE
+                </button>
+                <p style="margin-top: 1rem; color: var(--text-light);">
+                    Click only in case of real emergency. This will attempt to contact local emergency services.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Emergency Modal -->
+    <div id="emergency-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('emergency-modal')">&times;</button>
+            <h3>Emergency Contacts</h3>
+            <div id="emergency-contacts">
+                <!-- Emergency contacts will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Safety Tips Modal -->
+    <div id="safety-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('safety-modal')">&times;</button>
+            <h3>Safety Tips</h3>
+            <div id="safety-tips">
+                <!-- Safety tips will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data and functions
+        const emergencyNumbers = {
+            'default': {
+                police: '911',
+                ambulance: '911',
+                fire: '911'
+            },
+            'united kingdom': {
+                police: '999',
+                ambulance: '999',
+                fire: '999'
+            },
+            'france': {
+                police: '17',
+                ambulance: '15',
+                fire: '18'
+            },
+            'japan': {
+                police: '110',
+                ambulance: '119',
+                fire: '119'
+            },
+            'australia': {
+                police: '000',
+                ambulance: '000',
+                fire: '000'
+            }
+        };
+
+        const safetyTipsData = {
+            general: [
+                "Keep copies of important documents in separate locations",
+                "Share your itinerary with trusted contacts",
+                "Research local customs and laws before traveling",
+                "Keep emergency cash in multiple locations",
+                "Stay aware of your surroundings at all times",
+                "Trust your instincts - if something feels wrong, leave",
+                "Keep your phone charged and carry a portable charger",
+                "Learn basic phrases in the local language"
+            ],
+            specific: {
+                'night': "Avoid walking alone at night, especially in unfamiliar areas. Use well-lit, populated routes and consider ride-sharing services.",
+                'valuables': "Keep valuables hidden and secure. Use hotel safes and avoid displaying expensive items like jewelry or electronics.",
+                'transport': "Use licensed transportation services and verify rates beforehand. Keep doors locked in vehicles and be cautious of pickpockets on public transit.",
+                'accommodation': "Research accommodation reviews and location safety. Inform reception of your plans and expected return times."
+            }
+        };
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function generateItinerary() {
+            const form = document.getElementById('itinerary-form');
+            const formData = new FormData(form);
+            const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+            
+            // Validate required fields
+            const destination = formData.get('destination');
+            const startDate = formData.get('start-date');
+            const endDate = formData.get('end-date');
+            
+            if (!destination || !startDate || !endDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('itinerary-results').style.display = 'none';
+
+            // Simulate AI processing
+            setTimeout(() => {
+                const itinerary = createSampleItinerary(destination, startDate, endDate, interests);
+                displayItinerary(itinerary);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('itinerary-results').style.display = 'block';
+            }, 3000);
+        }
+
+        function createSampleItinerary(destination, startDate, endDate, interests) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+            
+            const activities = {
+                history: ['Visit Historical Museum', 'Guided walking tour of old town', 'Ancient monument exploration'],
+                art: ['Art Gallery visit', 'Local artist studio tour', 'Street art walking tour'],
+                food: ['Food market tour', 'Cooking class', 'Fine dining experience'],
+                nature: ['National park hike', 'Botanical garden visit', 'Scenic viewpoint'],
+                nightlife: ['Rooftop bar experience', 'Local music venue', 'Night market exploration'],
+                shopping: ['Local market shopping', 'Artisan craft shops', 'Souvenir hunting'],
+                adventure: ['Rock climbing', 'Water sports', 'Zip lining adventure'],
+                relaxation: ['Spa treatment', 'Beach relaxation', 'Meditation session']
+            };
+
+            const itinerary = [];
+            for (let i = 0; i < days; i++) {
+                const currentDate = new Date(start);
+                currentDate.setDate(start.getDate() + i);
+                
+                const dayActivities = [];
+                const selectedInterests = interests.length > 0 ? interests : ['history', 'food', 'nature'];
+                
+                // Morning activity
+                const morningInterest = selectedInterests[Math.floor(Math.random() * selectedInterests.length)];
+                dayActivities.push({
+                    time: '9:00 AM',
+                    title: activities[morningInterest][Math.floor(Math.random() * activities[morningInterest].length)],
+                    description: `Start your day with an engaging ${morningInterest} experience in ${destination}.`,
+                    type: morningInterest
+                });
+                
+                // Lunch
+                dayActivities.push({
+                    time: '12:30 PM',
+                    title: 'Local Cuisine Lunch',
+                    description: `Enjoy authentic ${destination} cuisine at a highly-rated local restaurant.`,
+                    type: 'food'
+                });
+                
+                // Afternoon activity
+                const afternoonInterest = selectedInterests[Math.floor(Math.random() * selectedInterests.length)];
+                dayActivities.push({
+                    time: '2:30 PM',
+                    title: activities[afternoonInterest][Math.floor(Math.random() * activities[afternoonInterest].length)],
+                    description: `Continue exploring with a ${afternoonInterest} adventure.`,
+                    type: afternoonInterest
+                });
+                
+                // Evening activity
+                if (interests.includes('nightlife')) {
+                    dayActivities.push({
+                        time: '7:00 PM',
+                        title: 'Evening Entertainment',
+                        description: `Experience ${destination}'s vibrant nightlife scene.`,
+                        type: 'nightlife'
+                    });
+                }
+                
+                itinerary.push({
+                    day: i + 1,
+                    date: currentDate.toLocaleDateString(),
+                    activities: dayActivities,
+                    safetyNote: generateSafetyNote(destination)
+                });
+            }
+            
+            return itinerary;
+        }
+
+        function generateSafetyNote(destination) {
+            const safetyNotes = [
+                "Stay in well-lit areas and avoid displaying valuable items.",
+                "Keep emergency contacts readily available and inform someone of your plans.",
+                "Be aware of local customs and dress codes to respect the culture.",
+                "Stay hydrated and protect yourself from sun exposure.",
+                "Use reputable transportation services and verify rates beforehand."
+            ];
+            return safetyNotes[Math.floor(Math.random() * safetyNotes.length)];
+        }
+
+        function displayItinerary(itinerary) {
+            const container = document.getElementById('itinerary-results');
+            let html = '<h3>Your Personalized Itinerary</h3>';
+            
+            itinerary.forEach(day => {
+                html += `
+                    <div class="day-card">
+                        <div class="day-title">Day ${day.day} - ${day.date}</div>
+                        ${day.activities.map(activity => `
+                            <div class="activity">
+                                <div class="activity-time">${activity.time}</div>
+                                <div class="activity-title">${activity.title}</div>
+                                <p>${activity.description}</p>
+                            </div>
+                        `).join('')}
+                        <div class="safety-alert">
+                            <h4>🛡️ Safety Tip for Today</h4>
+                            <p>${day.safetyNote}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function showEmergencyContacts() {
+            const destination = document.getElementById('destination').value.toLowerCase() || 'default';
+            const contacts = emergencyNumbers[destination] || emergencyNumbers['default'];
+            
+            const html = `
+                <div style="text-align: center;">
+                    <h4>🚔 Police: <a href="tel:${contacts.police}" style="color: #ef4444; font-weight: bold;">${contacts.police}</a></h4>
+                    <h4>🚑 Ambulance: <a href="tel:${contacts.ambulance}" style="color: #ef4444; font-weight: bold;">${contacts.ambulance}</a></h4>
+                    <h4>🚒 Fire Department: <a href="tel:${contacts.fire}" style="color: #ef4444; font-weight: bold;">${contacts.fire}</a></h4>
+                    <p style="margin-top: 1rem; color: #6b7280;">Tap any number to call immediately</p>
+                </div>
+            `;
+            
+            document.getElementById('emergency-contacts').innerHTML = html;
+            document.getElementById('emergency-modal').style.display = 'block';
+        }
+
+        function shareLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const locationUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                    
+                    // Create shareable message
+                    const message = `I'm currently at: ${locationUrl}\n\nSent from go.travel - Stay safe!`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'My Current Location',
+                            text: message,
+                            url: locationUrl
+                        });
+                    } else {
+                        // Fallback: copy to clipboard
+                        navigator.clipboard.writeText(message).then(() => {
+                            alert('Location copied to clipboard! Share this with your trusted contacts.');
+                        });
+                    }
+                }, function(error) {
+                    alert('Unable to get your location. Please check your browser permissions.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        function checkSafetyAlerts() {
+            const destination = document.getElementById('destination').value || 'your destination';
+            
+            // Simulate safety alerts
+            const alerts = [
+                {
+                    level: 'info',
+                    title: 'Weather Advisory',
+                    message: `Light rain expected in ${destination} this evening. Carry an umbrella.`
+                },
+                {
+                    level: 'warning',
+                    title: 'Area Advisory',
+                    message: `Increased pickpocket activity reported near tourist areas. Stay vigilant.`
+                },
+                {
+                    level: 'info',
+                    title: 'Transportation Update',
+                    message: `Public transit running normally with minor delays during rush hour.`
+                }
+            ];
+            
+            let alertHtml = '<div style="max-height: 300px; overflow-y: auto;">';
+            alerts.forEach(alert => {
+                const color = alert.level === 'warning' ? '#fbbf24' : '#3b82f6';
+                alertHtml += `
+                    <div style="border-left: 4px solid ${color}; padding: 1rem; margin-bottom: 1rem; background: #f8fafc;">
+                        <h4 style="color: ${alert.level === 'warning' ? '#92400e' : '#1e40af'}; margin-bottom: 0.5rem;">${alert.title}</h4>
+                        <p>${alert.message}</p>
+                    </div>
+                `;
+            });
+            alertHtml += '</div>';
+            
+            // Create and show alert modal
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button>
+                    <h3>Current Safety Alerts</h3>
+                    ${alertHtml}
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showSafetyTips() {
+            const destination = document.getElementById('destination').value || 'your destination';
+            
+            let tipsHtml = `<div style="max-height: 400px; overflow-y: auto;">
+                <h4>General Safety Tips for ${destination}:</h4>
+                <ul style="padding-left: 1.5rem; margin-bottom: 2rem;">`;
+            
+            safetyTipsData.general.forEach(tip => {
+                tipsHtml += `<li style="margin-bottom: 0.5rem;">${tip}</li>`;
+            });
+            
+            tipsHtml += `</ul><h4>Specific Safety Advice:</h4>`;
+            
+            Object.entries(safetyTipsData.specific).forEach(([category, tip]) => {
+                tipsHtml += `
+                    <div style="border-left: 4px solid #059669; padding: 1rem; margin-bottom: 1rem; background: #f0fdf4;">
+                        <h5 style="color: #059669; margin-bottom: 0.5rem; text-transform: capitalize;">${category} Safety</h5>
+                        <p>${tip}</p>
+                    </div>
+                `;
+            });
+            
+            tipsHtml += '</div>';
+            
+            document.getElementById('safety-tips').innerHTML = tipsHtml;
+            document.getElementById('safety-modal').style.display = 'block';
+        }
+
+        function triggerEmergency() {
+            const confirmEmergency = confirm('Are you experiencing a real emergency? This will attempt to contact emergency services.');
+            
+            if (confirmEmergency) {
+                // Show emergency options
+                const emergencyHtml = `
+                    <div style="text-align: center;">
+                        <h3 style="color: #ef4444; margin-bottom: 2rem;">🚨 Emergency Response Activated</h3>
+                        
+                        <div style="margin-bottom: 2rem;">
+                            <button onclick="window.open('tel:911')" style="background: #ef4444; color: white; padding: 1rem 2rem; border: none; border-radius: 10px; font-size: 1.2rem; margin: 0.5rem; cursor: pointer; width: 200px;">
+                                📞 Call Emergency Services
+                            </button>
+                        </div>
+                        
+                        <div style="margin-bottom: 2rem;">
+                            <button onclick="sendEmergencyLocation()" style="background: #f59e0b; color: white; padding: 1rem 2rem; border: none; border-radius: 10px; font-size: 1rem; margin: 0.5rem; cursor: pointer; width: 200px;">
+                                📍 Share Emergency Location
+                            </button>
+                        </div>
+                        
+                        <div style="margin-bottom: 2rem;">
+                            <button onclick="showNearbyHospitals()" style="background: #059669; color: white; padding: 1rem 2rem; border: none; border-radius: 10px; font-size: 1rem; margin: 0.5rem; cursor: pointer; width: 200px;">
+                                🏥 Find Nearby Hospitals
+                            </button>
+                        </div>
+                        
+                        <p style="color: #6b7280; font-size: 0.9rem;">
+                            If this is not a real emergency, please close this dialog.
+                        </p>
+                    </div>
+                `;
+                
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.style.display = 'block';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button>
+                        ${emergencyHtml}
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+        }
+
+        function sendEmergencyLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const emergencyMessage = `🚨 EMERGENCY ALERT 🚨\n\nI need immediate assistance at:\nhttps://maps.google.com/?q=${lat},${lng}\n\nTime: ${new Date().toLocaleString()}\n\nSent from go.travel Emergency System`;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: '🚨 EMERGENCY ALERT',
+                            text: emergencyMessage
+                        });
+                    } else {
+                        navigator.clipboard.writeText(emergencyMessage).then(() => {
+                            alert('Emergency location copied to clipboard! Send this to your emergency contacts immediately.');
+                        });
+                    }
+                });
+            } else {
+                alert('Location services not available. Please manually share your location with emergency services.');
+            }
+        }
+
+        function showNearbyHospitals() {
+            // Simulate nearby hospitals data
+            const hospitals = [
+                { name: 'City General Hospital', distance: '0.8 miles', phone: '(555) 123-4567' },
+                { name: 'Emergency Medical Center', distance: '1.2 miles', phone: '(555) 234-5678' },
+                { name: 'Regional Healthcare', distance: '2.1 miles', phone: '(555) 345-6789' }
+            ];
+            
+            let hospitalHtml = '<div style="text-align: left;"><h4>Nearest Medical Facilities:</h4>';
+            hospitals.forEach(hospital => {
+                hospitalHtml += `
+                    <div style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                        <h5 style="margin-bottom: 0.5rem;">${hospital.name}</h5>
+                        <p style="color: #6b7280; margin-bottom: 0.5rem;">Distance: ${hospital.distance}</p>
+                        <button onclick="window.open('tel:${hospital.phone}')" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">
+                            Call ${hospital.phone}
+                        </button>
+                    </div>
+                `;
+            });
+            hospitalHtml += '</div>';
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="close-modal" onclick="this.closest('.modal').remove()">&times;</button>
+                    <h3>🏥 Nearby Medical Facilities</h3>
+                    ${hospitalHtml}
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Initialize map (placeholder for Google Maps integration)
+        function initializeMap() {
+            const mapContainer = document.getElementById('map-container');
+            mapContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🗺️</div>
+                    <h3>Interactive Map</h3>
+                    <p style="margin-bottom: 2rem;">Google Maps integration would be loaded here with:</p>
+                    <ul style="text-align: left; max-width: 300px; margin: 0 auto;">
+                        <li>Real-time navigation</li>
+                        <li>Location tracking</li>
+                        <li>Points of interest</li>
+                        <li>Safety zone indicators</li>
+                        <li>Emergency services nearby</li>
+                    </ul>
+                    <button style="background: var(--secondary-gradient); color: white; padding: 1rem 2rem; border: none; border-radius: 10px; margin-top: 2rem; cursor: pointer;" onclick="alert('Google Maps would open here with full navigation capabilities.')">
+                        🗺️ Open Full Map
+                    </button>
+                </div>
+            `;
+        }
+
+        // Auto-update emergency numbers based on destination
+        document.getElementById('destination').addEventListener('input', function(e) {
+            const destination = e.target.value.toLowerCase();
+            if (emergencyNumbers[destination]) {
+                // Update emergency section with destination-specific info
+                console.log(`Emergency numbers updated for ${destination}`);
+            }
+        });
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('start-date').setAttribute('min', today);
+        document.getElementById('end-date').setAttribute('min', today);
+
+        // Update end date minimum when start date changes
+        document.getElementById('start-date').addEventListener('change', function(e) {
+            document.getElementById('end-date').setAttribute('min', e.target.value);
+        });
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMap();
+            
+            // Add smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Handle browser back button
+        window.addEventListener('popstate', function() {
+            // Close any open modals
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
